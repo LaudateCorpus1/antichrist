@@ -1,5 +1,14 @@
-define(['s3'], function (S3) {
+define(['jquery', 's3', 'angular'], function ($, S3, angular) {
     'use strict';
 
-    var bucket = new S3('s3-eu-west-1.amazonaws.com', 'elasticpw.surmair.de', 'AKIAI63P7EOLGUSUJM5A', '54emaFuRkPnJFWtZ+r3qB0R7ihTgZYjHDWCPJb29');
+    var app = angular.module('app', []);
+    app.controller('init', ['$scope', '$http', function($scope, $http) {
+        $scope.status = 'loading';
+        $http.get('/data/key').success(function(data) {
+            $scope.status = 'initialized';
+        }).error(function() {
+            $scope.status = 'uninitialized';
+        });
+    }]);
+    return app;
 });

@@ -16,17 +16,15 @@
         <!-- endbuild -->
     </head>
     <body>
-        <div class="container">
-            <div class="hero-unit">
-                <h1>'Allo, 'Allo!</h1>
-                <p>You now have</p>
-                <ul>
-                    <li>HTML5 Boilerplate</li>
-                    <li>Twitter Bootstrap</li>
-                    <li>RequireJS</li>
-                </ul>
-                <p>installed.</p>
-                <h3>Enjoy coding! - Yeoman</h3>
+        <div class="container" ng-controller="init">
+            <div id="loading" ng-show="status == 'loading'">
+                Loading...
+            </div>
+            <div id="uninitialized" ng-show="status == 'uninitialized'">
+                Uninitialized
+            </div>
+            <div id="initialized" ng-show="status == 'initialized'">
+                Initialized
             </div>
         </div>
 

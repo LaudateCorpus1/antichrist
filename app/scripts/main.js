@@ -3,6 +3,7 @@ require.config({
     paths: {
         'jquery': '../components/jquery/jquery',
         'bootstrap': 'vendor/bootstrap',
+        'angular': '../components/angular/angular',
         'lib/Crypto': '../components/cryptojs/lib/Crypto',
         'lib/CryptoMath': '../components/cryptojs/lib/CryptoMath',
         'lib/BlockModes': '../components/cryptojs/lib/BlockModes',
@@ -21,6 +22,10 @@ require.config({
         'bootstrap': {
             deps: ['jquery'],
             exports: 'jquery'
+        },
+        'angular': {
+            deps: ['jquery'],
+            exports: 'angular'
         },
         'lib/Crypto': {
             deps: [],
@@ -77,6 +82,8 @@ require.config({
     }
 });
 
-require(['app', 'jquery', 'bootstrap'], function (app, $) {
+require(['jquery', 'angular', 'app', 'bootstrap'], function ($, angular, app) {
     'use strict';
+
+    angular.bootstrap(document, ['app']);
 });
