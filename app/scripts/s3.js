@@ -1,5 +1,5 @@
 define(['jquery', 'crypto'], function($, Crypto) {
-	var Request = function() {
+	var S3Request = function() {
 		this.verb = 'GET';
 		this.host = '';
 		this.bucketname = '';
@@ -67,7 +67,7 @@ define(['jquery', 'crypto'], function($, Crypto) {
 			secret: secret,
 
 			list: function(prefix, cb) {
-				var req = new Request();
+				var req = new S3Request();
 				req.host = endpoint;
 				req.bucketname = this.bucketname;
 				if(prefix) {
@@ -82,7 +82,7 @@ define(['jquery', 'crypto'], function($, Crypto) {
 			},
 
 			put: function(key, content, cb) {
-				var req = new Request();
+				var req = new S3Request();
 				req.verb = 'PUT';
 				req.host = endpoint;
 				req.path = key;

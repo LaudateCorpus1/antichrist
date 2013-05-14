@@ -44,7 +44,7 @@ require.config({
             exports: 'Crypto'
         },
         'lib/AES': {
-            deps: ['lib/Crypto'],
+            deps: ['lib/Crypto', 'lib/BlockModes', 'lib/PBKDF2'],
             exports: 'Crypto'
         },
         'lib/HMAC': {

@@ -17,11 +17,40 @@
     </head>
     <body>
         <div class="container" ng-controller="init">
+            <div ng-show="error">
+                Error: {{error}}
+            </div>
+
             <div id="loading" ng-show="status == 'loading'">
                 Loading...
             </div>
             <div id="uninitialized" ng-show="status == 'uninitialized'">
-                Uninitialized
+                <form ng-submit="initialize(endpoint, bucketname, key, secret, password)">
+                    <fieldset>
+                        <label>Endpoint:</label>
+                        <select ng-model="endpoint">
+                            <option value="s3.amazonaws.com">US Standard *</option>
+                            <option value="s3-us-west-2.amazonaws.com">US West (Oregon) Region</option>
+                            <option value="s3-us-west-1.amazonaws.com">US West (Northern California) Region</option>
+                            <option value="s3-eu-west-1.amazonaws.com">EU (Ireland) Region</option>
+                            <option value="s3-ap-southeast-1.amazonaws.com">Asia Pacific (Singapore) Region</option>
+                            <option value="s3-ap-southeast-2.amazonaws.com">Asia Pacific (Sydney) Region</option>
+                            <option value="s3-ap-northeast-1.amazonaws.com">Asia Pacific (Tokyo) Region</option>
+                            <option value="s3-sa-east-1.amazonaws.com">South America (Sao Paulo) Region</option>
+                        </select>
+                        <label>Bucketname:</label>
+                        <input type="text" ng-model="bucketname" />
+                        <label>Key:</label>
+                        <input type="text" ng-model="key" />
+                        <label>Secret:</label>
+                        <input type="password" ng-model="secret" />
+                        <label>Password:</label>
+                        <input type="password" ng-model="password" />
+                        <label>Passwod (repeat):</label>
+                        <input type="password" ng-model="password2" /><span ng-show="passwords_match()">{{passwords_match()}}</span>
+                        <input type="submit" value="Setup" />
+                    </fieldset>
+                </form>
             </div>
             <div id="initialized" ng-show="status == 'initialized'">
                 Initialized
