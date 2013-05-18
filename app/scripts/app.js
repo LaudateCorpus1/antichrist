@@ -1,8 +1,10 @@
-define(['jquery', 's3', 'angular', 'crypto'], function ($, S3, angular, Crypto) {
+define(['jquery', 's3', 'angular', 'crypto', 'passdb'], function ($, S3, angular, Crypto, passdb) {
     'use strict';
 
     var app = angular.module('app', []);
-    app.controller('init', ['$scope', '$http', function($scope, $http) {
+    passdb.register(app);
+
+    app.controller('init', ['$scope', 'passdb', function($scope, passdb) {
         // $scope.endpoint = 's3.amazonaws.com';
         // Temporary:
         $scope.endpoint = 's3-eu-west-1.amazonaws.com';
@@ -12,6 +14,14 @@ define(['jquery', 's3', 'angular', 'crypto'], function ($, S3, angular, Crypto) 
         $scope.password2 = 'asdf';
         $scope.error = '';
         $scope.status = 'loading';
+
+        passdb.is_initialized().then(function() {
+            $scope.status = 'initialized';
+            $scope.$apply();
+        }, function() {
+            $scope.status = 'uninitialized';
+            $scope.$apply();
+        });
 
         $scope.initialize = function(endpoint, bucketname, key, secret, password) {
             if($scope.passwords_match() != 'Match!') {
@@ -56,12 +66,6 @@ define(['jquery', 's3', 'angular', 'crypto'], function ($, S3, angular, Crypto) 
             }
             return 'Match!';
         }
-
-        $http.get('/data/key').success(function(data) {
-            $scope.status = 'initialized';
-        }).error(function() {
-            $scope.status = 'uninitialized';
-        });
     }]);
     return app;
 });

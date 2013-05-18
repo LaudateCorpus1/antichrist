@@ -5,6 +5,7 @@ require.config({
         'bootstrap': 'vendor/bootstrap',
         'angular': '../components/angular/angular',
         'underscore': '../components/underscore/underscore',
+        'q': '../components/q/q',
         'lib/Crypto': '../components/cryptojs/lib/Crypto',
         'lib/CryptoMath': '../components/cryptojs/lib/CryptoMath',
         'lib/BlockModes': '../components/cryptojs/lib/BlockModes',
