@@ -34,12 +34,13 @@ define(['jquery', 'q', 's3', 'localstorage'], function ($, Q, S3, localStorage) 
 				var p = this._is_session_initialized().
 				fail(this._is_local_initialized).
 				fail(this._is_remote_initialized).
-				then(function() {
-					console.log("Session is initialized");
-					this._initialized = true;
-				});
+				then(this.set_initialized);
 				return p;
 			},
+            set_initialized: function() {
+                localStorage.setItem('initialized', 'true');
+                this._initialized = true;
+            }
 		};
 		return instance;
 	};
