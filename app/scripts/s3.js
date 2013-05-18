@@ -1,4 +1,4 @@
-define(['jquery', 'crypto'], function($, Crypto) {
+define(['jquery', 'underscore', 'crypto'], function($, _, Crypto) {
 	var S3Request = function() {
 		this.verb = 'GET';
 		this.host = '';
@@ -51,10 +51,10 @@ define(['jquery', 'crypto'], function($, Crypto) {
 				return url;
 			}
 			var sep = '?';
-			for(key in this.request_parameters) {
-				url += sep + key + '=' + this.request_parameters[key];
-				sep = '&';
-			}
+            _.each(this.request_parameters, function(val, key) {
+                url += sep + key + '=' + val;
+                sep = '&';
+            });
 			return url;
 		};
 	}

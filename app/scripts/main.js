@@ -4,6 +4,7 @@ require.config({
         'jquery': '../components/jquery/jquery',
         'bootstrap': 'vendor/bootstrap',
         'angular': '../components/angular/angular',
+        'underscore': '../components/underscore/underscore',
         'lib/Crypto': '../components/cryptojs/lib/Crypto',
         'lib/CryptoMath': '../components/cryptojs/lib/CryptoMath',
         'lib/BlockModes': '../components/cryptojs/lib/BlockModes',
@@ -26,6 +27,10 @@ require.config({
         'angular': {
             deps: ['jquery'],
             exports: 'angular'
+        },
+        'underscore': {
+            deps: [],
+            exports: '_'
         },
         'lib/Crypto': {
             deps: [],
