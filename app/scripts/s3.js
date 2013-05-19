@@ -26,7 +26,7 @@ define(['jquery', 'underscore', 'crypto'], function($, _, Crypto) {
 				crossDomain: true,
 				data: this.content,
 				headers: this.headers,
-			})
+			});
 		};
 
 		this._toSign = function() {
@@ -66,7 +66,7 @@ define(['jquery', 'underscore', 'crypto'], function($, _, Crypto) {
 			key: key,
 			secret: secret,
 
-			list: function(prefix, cb) {
+			list: function(prefix) {
 				var req = new S3Request();
 				req.host = endpoint;
 				req.bucketname = this.bucketname;
@@ -74,11 +74,7 @@ define(['jquery', 'underscore', 'crypto'], function($, _, Crypto) {
 					req.request_parameters['prefix'] = prefix;
 				}
 				req.sign(this.key, secret);
-				req.make_request().success(function(data) {
-					cb(data);
-				}).error(function(data) {
-					cb(null);
-				});
+				return req.make_request();
 			},
 
 			put: function(key, content, cb) {
@@ -89,11 +85,7 @@ define(['jquery', 'underscore', 'crypto'], function($, _, Crypto) {
 				req.bucketname = this.bucketname;
 				req.content = content;
 				req.sign(this.key, secret);
-				req.make_request().success(function(data) {
-					cb(data);
-				}).error(function(data) {
-					cb(null);
-				});
+				return req.make_request();
 			}
 		}
 	}

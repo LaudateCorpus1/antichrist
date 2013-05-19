@@ -30,30 +30,25 @@ define(['jquery', 's3', 'angular', 'crypto', 'passdb'], function ($, S3, angular
             }
             $scope.status = 'loading';
             var s3 = new S3(endpoint || '', bucketname || '', key || '', secret || '');
-            s3.list('/', function(data) {
-                if(!data || data.error) {
-                    $scope.status = 'uninitialized';
-                    $scope.error = 'This data does not seem valid:' + data.error;
-                    $scope.$apply();
-                    return;
-                }
-
+            s3.list('/').then(function(data) {
                 var content = Crypto.AES.encrypt(JSON.stringify({
                     endpoint: endpoint,
                     bucketname: bucketname,
                     key: key,
                     secret: secret
-                }), password)
-                s3.put('/data/key', content, function(data) {
-                    if(data && data.error) {
-                        $scope.status = 'uninitialized';
-                        $scope.error = 'Could not save key file: ' + data.error;
-                        $scope.$apply();
-                        return;
-                    }
-                    $scope.status = 'initialized';
-                    $scope.$apply();
-                })
+                }), password);
+                return s3.put('/data/key', content);
+            }).then(function(data) {
+                $scope.status = 'initialized';
+                $scope.$apply();
+            }).fail(function(error) {
+                $scope.status = 'uninitialized';
+                if(typeof(error.error) != "string") {
+                    error = {error: 'Unknown error'};
+                }
+                $scope.error = 'Something went wrong: ' + error.error;
+                $scope.$apply();
+                return;
             });
         };
 
