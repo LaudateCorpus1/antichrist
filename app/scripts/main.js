@@ -6,6 +6,7 @@ require.config({
         'angular': '../components/angular/angular',
         'underscore': '../components/underscore/underscore',
         'q': '../components/q/q',
+        'base64': '../components/base64/base64',
         'lib/Crypto': '../components/cryptojs/lib/Crypto',
         'lib/CryptoMath': '../components/cryptojs/lib/CryptoMath',
         'lib/BlockModes': '../components/cryptojs/lib/BlockModes',
@@ -32,6 +33,10 @@ require.config({
         'underscore': {
             deps: [],
             exports: '_'
+        },
+        'base64': {
+            deps: [],
+            exports: 'window'
         },
         'lib/Crypto': {
             deps: [],

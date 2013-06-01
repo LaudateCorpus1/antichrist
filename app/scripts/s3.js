@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'crypto'], function($, _, Crypto) {
+define(['jquery', 'underscore', 'crypto', 'base64'], function($, _, Crypto, base64) {
 	var S3Request = function() {
 		this.verb = 'GET';
 		this.host = '';
@@ -15,18 +15,24 @@ define(['jquery', 'underscore', 'crypto'], function($, _, Crypto) {
 			this.headers['Authorization'] = 'AWS '+key+':'+this.signature(secret);
 		};
 		this.signature = function(secret) {
-			return btoa(Crypto.HMAC(Crypto.SHA1, this._toSign(), secret, {asString: true}));
+			return base64.btoa(Crypto.HMAC(Crypto.SHA1, this._toSign(), secret, {asString: true}));
 		};
-		this.make_request = function() {
+		this.make_request = function(async) {
 			this.headers['Host'] = this.hostname;
 			this.headers['x-amz-date'] = this.date;
-			return $.ajax(this._url(), {
+			var req = $.ajax(this._url(), {
+				async: async,
 				type: this.verb,
 				contentType: this.headers['Content-Type'],
 				crossDomain: true,
 				data: this.content,
 				headers: this.headers,
 			});
+			if(async) {
+				return req;
+			} else {
+				return req.response;
+			}
 		};
 
 		this._toSign = function() {
@@ -51,10 +57,10 @@ define(['jquery', 'underscore', 'crypto'], function($, _, Crypto) {
 				return url;
 			}
 			var sep = '?';
-            _.each(this.request_parameters, function(val, key) {
-                url += sep + key + '=' + val;
-                sep = '&';
-            });
+			_.each(this.request_parameters, function(val, key) {
+				url += sep + key + '=' + val;
+				sep = '&';
+			});
 			return url;
 		};
 	}
@@ -66,7 +72,7 @@ define(['jquery', 'underscore', 'crypto'], function($, _, Crypto) {
 			key: key,
 			secret: secret,
 
-			list: function(prefix) {
+			list: function(prefix, async) {
 				var req = new S3Request();
 				req.host = endpoint;
 				req.bucketname = this.bucketname;
@@ -74,10 +80,10 @@ define(['jquery', 'underscore', 'crypto'], function($, _, Crypto) {
 					req.request_parameters['prefix'] = prefix;
 				}
 				req.sign(this.key, secret);
-				return req.make_request();
+				return req.make_request(async);
 			},
 
-			put: function(key, content, cb) {
+			put: function(key, content, async) {
 				var req = new S3Request();
 				req.verb = 'PUT';
 				req.host = endpoint;
@@ -85,9 +91,8 @@ define(['jquery', 'underscore', 'crypto'], function($, _, Crypto) {
 				req.bucketname = this.bucketname;
 				req.content = content;
 				req.sign(this.key, secret);
-				return req.make_request();
+				return req.make_request(async);
 			}
 		}
 	}
 });
-
