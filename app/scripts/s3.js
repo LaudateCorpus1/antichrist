@@ -18,6 +18,7 @@ define(['jquery', 'underscore', 'crypto', 'base64'], function($, _, Crypto, base
 			return base64.btoa(Crypto.HMAC(Crypto.SHA1, this._toSign(), secret, {asString: true}));
 		};
 		this.make_request = function(async) {
+			async = !!async;
 			this.headers['Host'] = this.hostname;
 			this.headers['x-amz-date'] = this.date;
 			var req = $.ajax(this._url(), {
@@ -86,6 +87,17 @@ define(['jquery', 'underscore', 'crypto', 'base64'], function($, _, Crypto, base
 			put: function(key, content, async) {
 				var req = new S3Request();
 				req.verb = 'PUT';
+				req.host = endpoint;
+				req.path = key;
+				req.bucketname = this.bucketname;
+				req.content = content;
+				req.sign(this.key, secret);
+				return req.make_request(async);
+			},
+
+			get: function(key, async) {
+				var req = new S3Request();
+				req.verb = 'GET';
 				req.host = endpoint;
 				req.path = key;
 				req.bucketname = this.bucketname;
